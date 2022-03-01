@@ -1,0 +1,87 @@
+<include file="public@header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#">列表</a></li> 
+			<li ><a href="{:url('production/add')}">添加</a></li>
+		</ul>
+
+		<form class="well form-inline margin-top-20" method="get" action="{:url('production/index')}"> 
+			 
+        
+			<input type="text" class="form-control" placeholder="工艺名称" name="search" style="width: 120px;" value="{:input('request.search/s','')}" placeholder="">
+            
+            <button class="btn btn-default" type="submit">搜索</button>
+		</form>
+
+
+		<table class="table table-hover table-bordered table-striped ">
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th>工艺名称</th>
+					<th>所属</th>
+					<th>单价</th>
+					<th>排序</th>
+					<th>简介</th>
+					<th>工艺是否可选</th>
+	
+					<th>{:lang('STATUS')}</th>
+	
+					<th width="140">{:lang('ACTIONS')}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="production_list" item="vo">
+					<tr>
+						<td>{$vo.pid}</td>
+						<td>{$vo.pname}</td>
+						<td>
+							<if condition="$vo['parentid'] eq 0">
+								顶级
+							<else />
+							<foreach name="production_list" item="vos">
+								<if condition="$vo['parentid'] eq $vos['pid']">
+									{$vos.pname}
+
+								</if>
+							</foreach>
+							</if>  
+
+						</td>
+						<td>{$vo.pprice}</td>
+						<td>{$vo.sort}</td>
+						<td>{$vo.synopsis}</td>
+						<td>
+							<if condition="$vo['is_yes'] eq 1">
+								<span class="label label-success">可编辑</span>
+							<else />
+								<span class="label label-danger">不可编辑</span>
+							</if>  
+						</td>
+						<td>
+							<if condition="$vo['status'] eq 1">
+								<span class="label label-success">开启</span>
+							<else />
+								<span class="label label-danger">关闭</span>
+							</if>  
+						</td>
+						<td>
+
+							<a class="btn btn-xs btn-primary" href="{:url('production/edit',array('production_id'=>$vo['pid']))}">{:lang('EDIT')}</a> 
+
+							<a class="btn btn-xs btn-danger js-ajax-delete" class="" href="{:url('production/delete',array('id'=>$vo['pid']))}">{:lang('DELETE')}</a>
+
+						</td>
+					</tr>  
+					</foreach>
+
+
+			</tbody>
+		</table>
+		<!-- <div class="pagination">{$page}</div> -->
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,538 @@
+<include file="public@header" />
+<style>
+    .production dl {
+        overflow: hidden;
+        margin-bottom: 0;
+    }
+
+    .form-horizontal .radio,
+    .form-horizontal .checkbox {
+        margin: 10px;
+        margin-top: 0;
+    }
+
+    .production dl dt,
+    .production dl dd {
+        float: left;
+        width: 120px;
+        border: 1px solid #ccc;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+    }
+
+    .form-inline .form-control {
+        width: 100%;
+        border: 0;
+        box-shadow: 0 0 0 0;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+
+    .product-contents {
+        height: 200px;
+        overflow: auto;
+
+    }
+</style>
+<if condition="empty($data['return_time'])">
+
+    <style>
+        .return-item {
+            display: none;
+        }
+    </style>
+</if>
+
+</head>
+
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li><a href="{:url('mark/index')}">列表</a></li>
+            <li class="active"><a href="#">修改</a></li>
+        </ul>
+
+
+        <form class="form-horizontal js-ajax-form margin-top-20" action="{:url('mark/save')}" method="post">
+
+
+            <div class="form-group">
+                <label class="col-sm-2 col-md-2 control-label">来料图片</label>
+                <div class="col-md-4 col-sm-4">
+                    <input type="hidden" name="image" id="thumb" value="{$data['image']}">
+                    <a href="javascript:uploadOneImage('图片上传','#thumb');">
+                        <if condition="empty($data['image'])">
+
+                            <img src="__TMPL__/public/assets/images/default-thumbnail.png" id="thumb-preview" width="70"
+                            style="cursor: hand" />
+                            <else/>
+
+                            <if condition="strstr($data['image'], 'upload')">
+
+                                <img src="/{$data['image']}" id="thumb-preview" width="70"
+                                style="cursor: hand" />
+                                <else/> 
+
+                                <img src="/upload/{$data['image']}" id="thumb-preview" width="70"
+                                style="cursor: hand" />
+                            </if>
+
+
+
+
+
+                        </if>
+      
+                    </a>
+                </div>
+                <label for="input-name" class="col-sm-1 col-md-1 control-label"><span
+                        class="form-required">*</span>客户名称</label>
+                <div class="col-md-4 col-sm-4">
+                    <select name="uid" class="form-control uid-list">
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="input-remark" class="col-sm-2 col-md-2 control-label">产品名称</label>
+                <div class="col-md-4 col-sm-4">
+                    <input type="text" class="form-control" name="name" value="{$data['name']}">
+                </div>
+                <label for="input-remark" class="col-sm-1 col-md-1 control-label">材质</label>
+                <div class="col-md-4 col-sm-4">
+
+                    <input type="text" class="form-control" name="material" value="{$data['material']}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="input-remark" class="col-sm-2 col-md-2 control-label">数量</label>
+                <div class="col-md-4 col-sm-4">
+                    <input type="number" class="form-control" name="number" value="{$data['number']}">
+
+                </div>
+                <label for="input-remark" class="col-sm-1 col-md-1 control-label">交付数量</label>
+                <div class="col-md-4 col-sm-4">
+                    <input type="number" class="form-control" name="com_number" value="{$data['com_number']}">
+
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="input-remark" class="col-sm-2 col-md-2 control-label">来料长</label>
+                <div class="col-md-4 col-sm-4">
+                    <input type="number" class="form-control" name="length" value="{$data['length']}">
+
+                </div>
+
+                <label for="input-remark" class="col-sm-1 col-md-1 control-label">坑纸长</label>
+                <div class="col-md-4 col-sm-4">
+                    <input type="number" class="form-control" name="inch_length" value="{$data['inch_length']}">
+
+                </div>
+            </div>
+
+
+
+
+           
+
+            <div class="form-group">
+                <label for="input-remark" class="col-sm-2 col-md-2 control-label">来料宽</label>
+                <div class="col-md-4 col-sm-4">
+                    <input type="number" class="form-control" name="width" value="{$data['width']}">
+
+                </div>
+
+                <label for="input-remark" class="col-sm-1 col-md-1 control-label">坑纸宽</label>
+                <div class="col-md-4 col-sm-4">
+                    <input type="number" class="form-control" name="inch_width" value="{$data['inch_width']}">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+                <label for="input-remark" class="col-sm-2 col-md-2 control-label">印刷工厂</label>
+                <div class="col-md-4 col-sm-4">
+                    <input type="text" class="form-control" name="factory" value="{$data['factory']}">
+
+                </div>
+                <label for="input-remark" class="col-sm-1 col-md-1 control-label">备注</label>
+                <div class="col-md-4 col-sm-4">
+                    <input type="text" class="form-control" name="remark" value="{$data['remark']}">
+
+                </div>
+            </div>
+            <div class="form-group form-inline">
+                <label for="input-remark" class="col-sm-2 col-md-2 control-label">是否回厂</label>
+                <div class="col-md-4 col-sm-4">
+                    <div class="checkbox"> <label> <input name="is_return" value="1" <if
+                                condition="$data['is_return'] eq 1">checked</if> type="radio">回厂</label></div>
+                    <div class="checkbox"> <label> <input name="is_return" value="0" <if
+                                condition="$data['is_return'] eq 0">checked</if> type="radio">不回厂</label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input-remark" class="col-sm-2 col-md-2 control-label">交付日期</label>
+                <div class="col-md-4 col-sm-4">
+                    <input type="date" class="form-control" name="com_time" value="{:date('Y-m-d',$data['com_time'])}">
+
+                </div>
+                <label for="input-remark " class="col-sm-1 col-md-1 control-label return-item">回厂日期</label>
+                <div class="col-md-4 col-sm-4 return-item">
+                    <if condition="empty($data['return_time'])">
+                        <input type="date" class="form-control" name="return" value="">
+                        <else />
+                        <input type="date" class="form-control" name="return" value="{:date('Y-m-d',$data['return_time'])}">
+                    </if>
+
+
+                </div>
+            </div>
+
+
+            <div class="form-group form-inline">
+                <label for="input-remark" class="col-sm-2 control-label"></label>
+                <div class="col-md-8 col-sm-8 product-contents">
+                    生成工艺
+
+                </div>
+            </div>
+            <input type="hidden" class="user_name" name="user_name" value="{$data['user_name']}" /> 
+            <input type="hidden" class="oid" name="id" value="{$data['oid']}" />
+            <input type="hidden" class="get_uid" value="{$data['uid']}" />
+            <div class="form-group form-inline">
+                <div class="production">
+                    <label for="input-remark" class="col-sm-2 control-label"></label>
+                    <div class="col-md-10 col-sm-10">
+
+                        <dl>
+
+                            <dd>工艺名称</dd>
+                            <dd>来料数</dd>
+                            <dd>完成数</dd>
+                            
+                            <dd>操作人</dd>
+                            <dd>状态</dd>
+                            <dd style="width:250px;">备注</dd>
+                            <dd>操作</dd>
+
+                        </dl>
+                        <div class="product-content">
+                            <!-- <foreach name="order_list" item="vo">
+                                <dl class="production-item">
+                                    <dt>{$vo.pname}</dt>
+                                    <dd><input type="number" min="0" class="form-control sum" placeholder="值"
+                                            value="{$vo.sum_num}">
+                                    </dd>
+                                    <dd><input type="number" min="0" class="form-control ok" placeholder="值"
+                                            value="{$vo.com_num}">
+                                    </dd>
+                                    <dd><input type="text" class="form-control remark" placeholder="备注"
+                                            value="{$vo.remark}"></dd>
+                                    <dd>
+                                        <select class="form-control uid-lists">
+
+                                        </select>
+                                    </dd>
+
+                                    <dd>
+                                        <select class="form-control status">
+                                            <option value="0" <if condition="$vo['cstatus'] eq 0">selected</if>> 未完成
+                                            </option>
+                                            <option value="1" <if condition="$vo['cstatus'] eq 2">selected</if>>部分完成
+                                            </option>
+                                            <option value="1" <if condition="$vo['cstatus'] eq 1">selected</if>>已完成
+                                            </option>
+                                        </select>
+                                    </dd>
+                                    <dd>
+                                        <div data-id="{$vo.proid}" data-cid="{$vo.pcid}"
+                                            class="btn btn-sm btn-primary save_pcart"> 保存
+                                        </div>
+                                        <div data-id="{$vo.proid}" data-cid="{$vo.pcid}"
+                                            class="btn btn-sm btn-danger cart_delete"> 删除
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </foreach> -->
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="hidden-input">
+
+
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary js-ajax-submit"> 编辑 </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <script src="__STATIC__/js/admin.js"></script>
+
+    <script>
+      
+        
+        $(document).on('change', ' input[name="is_return"]', function () {
+
+            if ($(this).val() == 1) {
+                $('.return-item').show();
+            } else {
+                $('.return-item').hide();
+            }
+
+        });
+
+        $(document).on('change', '.changeRadio', function () {
+            var html = '';
+            $('.product-contents input:radio:checked').each(function (i) { 
+
+                if ($(this).prop("checked")) {
+                    html += `<input type="hidden" name="pro_data[]" value="${$(this).val()}" />`
+                }
+            });
+            $('.hidden-input').html(html);
+        });
+
+        function getUsers() {
+            $.ajax({
+                url: '/admin/Users/getUsers',
+                type: 'post',
+                data: { type: 0 },
+                dataType: 'json',
+                success(res) {
+                    var html = '';
+                    var id = $('.get_uid').val();
+                    res.data.forEach(item => { 
+
+                        html += `<option value="${item.id}" ${id == item.id ? 'selected' : ''}>${item.signature} </option>`
+
+                    });
+
+                    $('.uid-list').html(html);
+                   
+                  
+                }
+            });
+        }
+        getUsers();
+        function getOption() {
+            $.ajax({
+                url: '/admin/Users/getUsers',
+                type: 'post',
+                data: { type: 2 },
+                dataType: 'json',
+                success(res) {
+                    var html = '';
+                    var id = $('.get_uid').val();
+
+                    var productList = '<?php echo json_encode($order_list) ;?>';
+                            productList = JSON.parse(productList);
+        
+                            var phtml = '';
+                            productList.forEach(item=>{
+                                var html = '<option value="0">选择操作员</option>';
+                                res.data.forEach(items => { 
+
+                                html += `<option value="${items.id}" ${items.id == item.option_id ? 'selected' : ''}>${items.user_login} ${items.user_nickname}</option>`
+
+                                });
+                                phtml+=`<dl class="production-item">
+                                    <dt>${item.pname}</dt>
+                                    <dd><input type="number" min="0" class="form-control sum" placeholder="值"
+                                            value="${item.sum_num}">
+                                    </dd>
+                                    <dd><input type="number" min="0" class="form-control ok" placeholder="值"
+                                            value="${item.com_num}">
+                                    </dd>
+
+                                    <dd>
+                                        <select class="form-control uid-lists">
+                                            ${html}
+                                        </select>
+                                    </dd>
+
+                                    <dd> 
+                                        <select class="form-control status">
+                                            <option value="0" ${item.cstatus == 0 ? 'selected' :''} > 未完成
+                                            </option>  
+                                            <option value="2"  ${item.cstatus == 2 ? 'selected' :''} >部分完成
+                                            </option>
+                                            <option value="1"  ${item.cstatus == 1 ? 'selected' :''} >已完成
+                                            </option>
+                                        </select>
+                                    </dd>
+                                    <dd style="width:250px;"> <input type="text" class="form-control remark" placeholder="备注"
+                                            value="${item.remark}"></dd>
+                                    <dd>
+                                        <div data-id="${item.proid}" data-cid="${item.pcid}"
+                                            class="btn btn-sm btn-primary save_pcart"> 保存
+                                        </div>
+                                        <div data-id="${item.proid}" data-cid="${item.pcid}"
+                                            class="btn btn-sm btn-danger cart_delete"> 删除
+                                        </div>
+                                    </dd>
+                                </dl>`;
+
+                                
+                            });
+
+
+
+
+                    $('.product-content').html(phtml)
+                   
+                }
+            });
+        }
+        getOption();
+        $.ajax({
+            url: '/admin/Mark/get_pro',
+            type: 'post',
+            data: {},
+            dataType: 'json',
+            success(res) {
+                var html = '';
+                res.data.forEach((item, indexs) => {
+                    if (item.is_yes == 1) {
+                        html += `  <div class="checkbox"> <label> <input name="pro_data[]" value="${item.pid}" type="checkbox">${item.pname}</label></div>`
+                    } else {
+                        html += `<div>${item.pname}`
+                        item.next_level.forEach((sitem) => {
+                            html += `  <div class="checkbox"> <label> <input class="changeRadio" name="pid${indexs}" value="${sitem.pid}" type="radio">${sitem.pname}</label></div>`
+                        })
+                        html += '</div>'
+                    }
+
+                });
+                $('.product-contents').html(html);
+
+            }
+        });
+        // $.ajax({
+        //     url: '/admin/Mark/get_pro',
+        //     type: 'post',
+        //     data: {},
+        //     dataType: 'json',
+        //     success(res) {
+        //         var html = '';
+        //         res.data.forEach(item => {
+
+        //             productList.forEach(items => {
+        //                 if (item.pid == items.proid) {
+        //                     item = items;
+        //                 }
+        //             });
+        //             console.log(item);
+        //             html += ` <dl class="production-item">
+        //                 <dt>${item.pname}</dt>
+        //                 <dd><input type="number" min="0" class="form-control sum" placeholder="值" value="${item.sum_num ? item.sum_num : ''}"></dd>
+        //                 <dd><input type="number" min="0" class="form-control ok" placeholder="值"  value="${item.com_num ? item.com_num : ''}"></dd>
+        //                 <dd><input type="text" class="form-control remark" placeholder="备注"  value="${item.remark ? item.remark : ''}"></dd>
+        //                 <dd>
+        //                     <select  class="form-control uid-list">
+        //                     </select> 
+        //                 </dd>
+
+        //                 <dd>
+        //                     <select  class="form-control status">
+        //                         <option value="0" ${item.cstatus && item.cstatus == 0 ? 'selected' : ''}> 未完成</option>
+        //                         <option value="1" ${item.cstatus && item.cstatus == 1 ? 'selected' : ''}>已完成</option>
+        //                     </select>
+        //                 </dd>
+        //                 <dd>
+        //                     <div data-id="${item.pid ? item.pid : item.proid}" data-cid="${item.pcid ? item.pcid : ''}" class="btn btn-sm btn-primary save_pcart"> 保存 </div>
+        //                 </dd>
+        //             </dl>`
+        //         });
+        //         $('.product-content').html(html);
+        //         getUsers();
+        //     }
+        // });
+
+        $(document).on('click', '.save_pcart', function () {
+            var el = $(this).parents('dl');
+            var id = $(this).data('id');
+            var cid = $(this).data('cid');
+            // console.log(el.find('.sum').val());
+            // console.log(el.find('.ok').val());
+            // console.log(el.find('.remark').val());
+            // console.log(el.find('.remark').val());
+            // console.log(el.find('.uid-list option:selected').val());
+            // console.log(el.find('.uid-list option:selected').text());
+            // console.log(el.find('.status option:selected').val());
+            $.ajax({
+                url: '/admin/Mark/save_pcart',
+                type: 'post',
+                data: {
+                    pcid: cid,
+                    poid: $('.oid').val(),
+                    proid: id,
+                    completioner: el.find('.uid-list option:selected').text(),
+                    com: el.find('.ok').val(),
+                    sum: el.find('.sum').val(),
+                    cstatus: el.find('.status option:selected').val(),
+                    remark: el.find('.remark').val(),
+
+                },
+                dataType: 'json',
+                success(res) {
+                    alert('保存成功');
+                }
+            });
+
+            console.log($(this).data('id'));
+        });
+        $(document).on('click', '.cart_delete', function () {
+
+            var id = $(this).data('id');
+            var cid = $(this).data('cid');
+            var _this = $(this);
+            $.ajax({
+                url: '/admin/Mark/cart_delete',
+                type: 'post',
+                data: {
+
+                    id: cid,
+
+                    oid: $('.oid').val(),
+
+
+                },
+                dataType: 'json',
+                success(res) {
+                    _this.parents('dl').remove();
+
+                }
+            });
+
+            console.log($(this).data('id'));
+        });
+ 
+
+        $('.uid-list').change(function () {
+
+            $('.user_name').val($('.uid-list option:selected').text());
+
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,188 @@
+<include file="public@header" />
+<style>
+	th {
+		padding: 5px;
+		text-align: center;
+	}
+
+	td {
+		text-align: center;
+	}
+
+	.table th,
+	.table td {
+		border: 1px solid #ccc;
+	}
+	td{
+		font-size:12px;
+	}
+</style>
+</head>
+
+<body>
+
+
+
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+
+			<li class="active"><a href="#">列表</a></li>
+
+
+		</ul>
+		<form class="well form-inline margin-top-20" method="get" action="{:url('mark/production_table')}">
+
+			<input type="text" class="form-control" name="search" placeholder="客户名称" style="width: 120px;"
+				value="{:input('request.search/s','')}" placeholder="">
+
+			<button class="btn btn-default" type="submit">搜索</button>
+		</form>
+
+
+
+
+		<table class="table table-hover table-striped table-bordered">
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th>单号</th>
+					<th>客户</th>
+					<th>产品信息</th>
+
+
+					<th>进度</th>
+					<th>状态</th>
+					<th>创建日期/交付日期</th>
+					<th>生成工艺</th>
+
+
+
+
+
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="porder_list" item="vo">
+					<tr>
+						<td>
+							{$vo['oid']}
+						</td>
+						<td>{$vo['order_no']} </td>
+						<td>{$vo['user_name']} </td>
+						<td>
+							<p>产品名: {$vo['name']} </p>
+							<P>材质: {$vo['material']}</P>
+							<p>来料宽: {$vo['width']} | 来料长: {$vo['length']}</p>
+							<p>来料数: {$vo['number']} | 交付数: {$vo['com_number']} </p>
+
+						</td>
+
+						<td>{$vo['com_pocart']}%</td>
+						<td>
+							<if condition="$vo['status'] eq 0">
+								<span class="label label-success">待确认 </span>
+								<elseif condition="$vo['status'] eq 1">
+									<span class="label label-success">待加工 </span>
+									<elseif condition="$vo['status'] eq 2">
+										<span class="label label-danger">加工中</span>
+										<else />
+										<span class="label label-danger">已完成</span>
+							</if>
+						</td>
+						<td>{:date('Y-m-d H:i:s',$vo['add_time'])}
+							<p>{:date('Y-m-d H:i:s',$vo['com_time'])}</p>
+						</td>
+
+						<td>
+
+							<table class="table" align="center" style="width:100%;margin:0; ">
+
+								<tr>
+									<foreach name="vo.Production" item="vt">
+										<foreach name="pro_data" item="vos">
+											<if condition=" $vt['proid'] eq $vos['pid']">
+												<th>{$vos['pname']}</th>
+												<else />
+
+
+												<foreach name="vos.next_level" item="voss">
+
+													<if condition=" $vt['proid'] eq $voss['pid']">
+														<th>{$voss['pname']}</th>
+													</if>
+												</foreach>
+
+
+
+											</if>
+
+
+
+										</foreach>
+									</foreach>
+
+								</tr>
+								<tr>
+
+									<foreach name="vo.Production" item="vt">
+										<foreach name="pro_data" item="vos">
+											<if condition=" $vt['proid'] eq $vos['pid']">
+												<td>
+													{$vt['sum_num']} | {$vt['com_num']}
+												</td>
+												<else />
+
+
+												<foreach name="vos.next_level" item="voss">
+
+													<if condition=" $vt['proid'] eq $voss['pid']">
+														<td>{$vt['sum_num']} | {$vt['com_num']}</td>
+													</if>
+												</foreach>
+
+
+
+											</if>
+
+
+
+										</foreach>
+									</foreach>
+
+								</tr>
+
+							</table>
+
+
+
+						</td>
+
+
+
+
+
+					</tr>
+				</foreach>
+
+
+			</tbody>
+		</table>
+		<div class="pagination">{$page}</div>
+		<input type="hidden" value="{:input('request.search/s','')}" class="search-val" />
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+<script>
+
+	var pageList = $('.pagination li').length;
+	if($('.search-val').val() != ''){
+		for(var i=0;i<pageList;i++){
+			$('.pagination li').eq(i).find('a').attr('href',$('.pagination li').eq(i).find('a').attr('href')+ '&search=' +$('.search-val').val());
+		}
+
+
+ 
+	}
+
+</script>
+</html>

@@ -1,0 +1,45 @@
+<include file="public@header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:url('admin/users/dept')}">部门列表</a></li>
+			<li><a href="{:url('admin/users/deptadd')}">添加部门</a></li>
+		</ul>
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th>部门名称</th>
+					<!-- <th>层级</th> -->
+					<th>上级部门</th>
+					<th>排序</th>
+					<th>更新时间</th>
+					<th>{:lang('STATUS')}</th>
+					<th width="140">{:lang('ACTIONS')}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="dept_list" item="vo">
+				<tr>
+					<td>{$vo.id}</td>
+					<td>{$vo.name}</td>
+					<!-- <td>{$vo.level}</td> -->
+					<td>{$vo.parent_name}</td>
+					<td>{$vo.list_order}</td>
+					<td>{:date('Y-m-d H:i:s',$vo['update_time'])}</td>
+					<td>
+						<php> $statuses=['禁用','正常','未知']; </php>
+						<span class="label label-success">{$statuses[$vo['status']]}</span>
+					</td>
+					<td>
+						<a class="btn btn-xs btn-primary" href='{:url("/admin/users/deptedit",array("id"=>$vo["id"]))}'>{:lang('EDIT')}</a>
+					</td>
+				</tr>
+				</foreach>
+			</tbody>
+		</table>
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<include file="public@header" />
+<style>
+    .production dl {
+        overflow: hidden;
+        margin-bottom: 0;
+    }
+
+    .production dl dt,
+    .production dl dd {
+        float: left;
+        width: 120px;
+        border: 1px solid #ccc;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size:12px;
+    }
+
+    .form-inline .form-control {
+        width: 100%;
+        border: 0;
+        box-shadow: 0 0 0 0;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+
+    .form-horizontal .control-label {
+        padding-top: 0;
+    }
+
+    .wrap {
+        width: 1000px;
+        margin: 0 auto;
+    }
+
+    @page {
+        size: auto;
+        /* auto is the initial value */
+        margin: 0mm;
+        /* this affects the margin in the printer settings */
+    }
+
+    .item {
+        height: 30px;
+    }
+
+    .item label {
+        width: 100px;
+
+        text-align: right;
+    }
+
+    .sitem {
+        width: 210px;
+        display: inline-block;
+    }
+
+    .sitem label {
+        width: 100px;
+        text-align: right;
+
+        display: inline-block;
+    }
+
+    .img {
+        text-align: center;
+    }
+
+    .right-content {
+        display: inline-block;
+        vertical-align: middel;
+        width: 270px;
+    }
+
+    .left-content {
+        display: inline-block;
+        vertical-align: middel;
+        width: 470px;
+    }
+
+    .form-horizontal {
+        clear: both;
+        padding-top: 50px;
+        text-align: center;
+    }
+
+    .content {
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+</head>
+
+<body>
+    <div style="display: none;">
+
+        <?php var_dump($data) ;?>
+    
+    
+    </div>
+
+    <div class="wrap js-check-wrap">
+
+        <div style="height: 100px;;"></div>
+        <div class="content">
+            <div class="left-content"> 
+                <div class="item">
+                    <label>客户名称:</label>
+                    <span> {$data['user_name']}</span>
+
+                </div>
+                <div class="item">
+                    <label>产品名称:</label>
+
+                    <span> {$data['name']}</span>
+                </div>
+                <div class="item">
+                    <label>材质:</label>
+                    <span> {$data['material']}</span>
+                </div>
+                <div class="item">
+                    <div class="sitem">
+                        <label>来料数量:</label>
+
+                        <span> {$data['number']}</span>
+                    </div>
+                    <div class="sitem">
+                        <label>交付数量:</label>
+                        <span> {$data['com_number']}</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="sitem">
+                        <label>来料宽:</label>
+
+                        <span> {$data['width']}</span>
+                    </div>
+                    <div class="sitem">
+                        <label>来料长:</label>
+
+                        <span> {$data['length']}</span>
+                    </div>
+
+                </div>
+                <div>
+                    <div class="sitem">
+                        <label>坑纸宽:</label>
+                        <span> {$data['inch_width']}</span>
+                    </div>
+                    <div class="sitem">
+                        <label>坑纸长:</label>
+                        <span> {$data['inch_length']}</span>
+                    </div>
+                </div>
+                <div class="item">
+                    <label>印刷工厂:</label>
+
+                    <span> {$data['factory']}</span>
+                </div>
+                <div class="item">
+                    <label>备注:</label>
+                    <span> {$data['remark']}</span>
+                </div>
+
+                <div class="item">
+                    <label>交付日期:</label>
+
+                    <span>{:date('Y-m-d H:i:s',$data['com_time'])} </span>
+                </div>
+
+                <if condition="$data['is_return'] eq 1">
+                    <div class="item">
+                        <label>回厂日期:</label>
+                        <span>{:date('Y-m-d H:i:s',$data['return_time'])} </span>
+                    </div>
+
+                    <else />
+                    <div class="item">
+                        <label>是否回厂:</label>
+
+                        <span>
+                            不回厂
+                        </span>
+                    </div>
+                </if>
+
+            </div>
+            <div class="right-content">
+                <div class="img">
+                    <if condition="!empty($data['image'])">
+
+
+                        <if condition="strstr($data['image'], 'upload')">
+
+                            <img src="/{$data['image']}" width="150" id="thumb-preview" width="70"
+                                style="cursor: hand" />
+                            <else />
+
+                            <img src="/upload/{$data['image']}" width="150" id="thumb-preview" width="70"
+                                style="cursor: hand" />
+                        </if>
+                    </if>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-horizontal js-ajax-form margin-top-20">
+
+
+
+            <div style="display:inline-block" class="form-group form-inline">
+                <div class="production">
+
+
+                    <dl>
+
+                        <dt>工艺名称</dt>
+                        <dd>来料数</dd>
+                        <dd>完成数</dd>
+ 
+                        <dd>操作人</dd>
+                        <dd>是否已完成</dd>
+                        <dd>日期</dd>
+                        <dd style="width:250px;">备注</dd>
+                       
+
+                    </dl>
+                    <div class="product-content">
+                        <foreach name="order_list" item="vo">
+                            <dl class="production-item">
+                                <dt>{$vo.pname}</dt>
+                                <dd>{$vo.sum_num}</dd>
+                                <dd>{$vo.com_num}</dd>
+
+                                <dd>
+                                    {$vo.completioner}
+                                </dd>
+
+                                <dd>
+                                    <if condition="$vo['cstatus'] eq 1">
+                                        <span class="label label-success">已完成 </span>
+                                        <else />
+                                        <span class="label label-danger">未完成</span>
+                                    </if>
+
+                                </dd>
+                                
+                                <dd>
+                                    {:date('Y-m-d H:i:s',$data['add_time'])}
+                                </dd>
+                                <dd style="width:250px;">{$vo.remark}</dd>
+                            </dl>
+                        </foreach>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+
+        <p class="btns">
+            <button type="button" class="btn btn-default click-btn" onclick="doPrint()">打印</button>
+        </p>
+    </div>
+    <script src="__STATIC__/js/admin.js"></script>
+</body>
+<script type="text/javascript">
+    function doPrint() {
+        //获取整个打印前页面，作用是打印后恢复。
+        var bdhtml = window.document.body.innerHTML;
+        $('.click-btn').remove();
+
+        // var prnhtml = $('.form-horizontal').html();
+        // //将页面显示要打印的内容。
+        // window.document.body.innerHTML = prnhtml;
+        //打印整个页面 
+        window.print();
+        //恢复打印前的页面
+        //    window.document.body.innerHTML = bdhtml;
+        $('.btns').html(`<button type="button" class="btn btn-default click-btn" onclick="doPrint()">打印</button>`);
+    }
+</script>
+
+</html>

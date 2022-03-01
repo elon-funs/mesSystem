@@ -1,0 +1,119 @@
+<include file="public@header" />
+<style>
+	th {
+		padding: 5px;
+		text-align: center;
+	}
+
+	td {
+		text-align: center;
+		font-size:12px
+	}
+
+	.table th,
+	.table td {
+		border: 1px solid #ccc;
+	}
+
+	.stable {
+		width: 100%;
+	}
+
+	.stable td {
+		width: 20%;
+		padding: 10px 0;
+	}
+</style>
+<script type="text/javascript" src="__STATIC__/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js?v="></script>
+<link rel="stylesheet" href="__STATIC__/js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css?v=">
+</head>
+
+<body>
+ 
+
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+
+			<li class="active"><a href="#">列表</a></li> 
+
+		</ul>
+
+		<form class="well form-inline margin-top-20" method="get" action="{:url('mark/workload_table')}">
+			<input type="text" name="str_time" placeholder="开始时间" value="{:input('request.str_time/s','')}" class="js-bootstrap-date form-control statistics_start ">
+			至
+			<input type="text" name="end_time"  placeholder="结束时间" value="{:input('request.end_time/s','')}" class="js-bootstrap-date form-control statistics_end">
+
+	
+
+				<input type="submit" class="btn btn-primary" value="搜索">
+				<a href="{:url('table/excel')}"><input type="button" class="btn btn-primary"  value="下载"></a>
+		</form>
+
+
+
+
+		<table class="table table-hover table-bordered table-striped ">
+			<thead>
+				<tr>
+
+					<th>员工</th>
+					<th>处理工艺</th>
+
+
+
+
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="list" item="vo">
+					<tr>
+
+						<td>{$vo.signature} {$vo.user_login} </td>
+						<td>
+							<if condition="count($vo.production_data) gt 0">
+								<table class="stable">
+									<tr>
+
+										<th>工序</th>
+										<th>承接总量</th>
+										<th>完成量</th>
+										<th>耗损量</th>
+
+									</tr>
+									<foreach name="vo.production_data" item="vos">
+
+										<tr>
+
+											<td>{$vos.pname}</td>
+											<td>{$vos.total_number}</td>
+											<td>{$vos.total_complete}</td>
+											<td>{$vos.total_number - $vos.total_complete}</td>
+
+
+										</tr>
+
+									</foreach>
+
+
+
+
+								</table>
+
+							</if>
+						</td>
+
+
+
+
+					</tr>
+				</foreach>
+
+
+			</tbody>
+		</table>
+ 
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+
+</html>

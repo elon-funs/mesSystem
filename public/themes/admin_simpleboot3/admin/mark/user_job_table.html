@@ -1,0 +1,196 @@
+<include file="public@header" />
+<style>
+	th {
+		padding: 5px;
+		text-align: center;
+	}
+
+	td {
+		text-align: center;
+	}
+
+	.table th,
+	.table td {
+		border: 1px solid #ccc;
+	}
+
+	.stable {
+		width: 100%;
+	}
+
+	.stable td {
+		width: 20%;
+		padding: 10px 0;
+	}
+	td{
+		font-size:12px;
+	}
+	
+</style>
+<script type="text/javascript" src="__STATIC__/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js?v="></script>
+<link rel="stylesheet" href="__STATIC__/js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css?v=">
+</head>
+
+<body>
+
+
+
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+
+			<li class="active"><a href="#">列表</a></li>
+
+
+		</ul>
+		<form class="well form-inline margin-top-20" method="get" action="{:url('mark/user_job_table')}">
+
+			<input type="text" class="form-control" name="search" placeholder="客户名称" style="width: 120px;"
+				value="{:input('request.search/s','')}" placeholder=""> 
+			<!-- <input type="date" class="form-control" name="str_time" value="{:input('request.str_time/s','')}">
+			<input type="date" class="form-control" name="end_time" value="{:input('request.end_time/s','')}"> -->
+			<input type="text" name="str_time" placeholder="开始时间" value="{:input('request.str_time/s','')}" class="js-bootstrap-date form-control statistics_start ">
+			至
+			<input type="text" name="end_time"  placeholder="结束时间" value="{:input('request.end_time/s','')}" class="js-bootstrap-date form-control statistics_end">
+	
+			<button class="btn btn-default" type="submit">搜索</button>
+		</form>
+
+
+		<table class="table table-hover table-bordered table-striped">
+			 
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th>单号</th>
+					<th>客户</th>
+					<th>产品信息</th>
+					
+					<th>进度</th>
+					<th>状态</th>
+					<th>创建日期/交付日期</th>
+					<th>加工记录</th>
+
+
+
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="porder_list" item="vo">
+					<tr>
+						<td>
+							{$vo['oid']}</td>
+
+													<td>{$vo['order_no']} </td>
+						<td>{$vo['user_name']} </td>
+						<td>
+							<p>产品名: {$vo['name']} </p>
+							<P>材质: {$vo['material']}</P>
+							<p>来料宽: {$vo['width']} | 来料长: {$vo['length']}</p>
+							<p>来料数: {$vo['number']} | 交付数: {$vo['com_number']} </p>
+
+						</td>
+						
+						<td>{$vo['com_pocart']}%</td>
+						<td>
+							<if condition="$vo['status'] eq 0">
+								<span class="label label-success">待确认 </span>
+								<elseif condition="$vo['status'] eq 1">
+									<span class="label label-success">待加工 </span>
+									<elseif condition="$vo['status'] eq 2">
+										<span class="label label-danger">加工中</span>
+										<else />
+										<span class="label label-danger">已完成</span>
+							</if>
+						</td>
+						<td>{:date('Y-m-d H:i:s',$vo['add_time'])}
+							<p>{:date('Y-m-d H:i:s',$vo['com_time'])}</p>
+						</td>
+
+
+
+
+
+						<td colspan="5">
+
+
+
+							<table class="stable">
+								<tr>
+									<th>员工</th>
+									<th>工序</th>
+									<th>订单量|完成量</th>
+									<th>状态</th>
+									<th>日期</th>
+								</tr>
+								<foreach name="vo.production" item="vos">
+
+									<tr>
+										<td>{$vos.completioner}</td>
+										<td>{$vos.pname}</td>
+										<td>{$vos.sum_num} | {$vos.com_num}</td>
+										<td>
+											<if condition="$vos['cstatus'] eq 1">
+												<span class="label label-success">已完成 </span>
+												<elseif condition="$vos['cstatus'] eq 2">
+													<span class="label label-success">加工中 </span>
+													<else />
+													<span class="label label-danger">待加工</span>
+											</if>
+
+										</td>
+
+										<td>
+											<if condition="$vos['completion_time'] eq 0">
+
+												<else />
+												{:date('Y-m-d',$vos['completion_time'])}
+											</if>
+
+
+										</td>
+
+									</tr>
+
+								</foreach>
+
+
+
+
+							</table>
+
+
+
+
+						</td>
+
+
+
+
+
+					</tr>
+				</foreach>
+
+
+			</tbody>
+		</table>
+		<div class="pagination">{$page}</div>
+		<input type="hidden" value="{:input('request.search/s','')}" class="search-val" /> 
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+ 
+</body>
+<script>
+
+	var pageList = $('.pagination li').length;
+	 
+	if($('.search-val').val() != ''){
+		for(var i=0;i<pageList;i++){
+			$('.pagination li').eq(i).find('a').attr('href',$('.pagination li').eq(i).find('a').attr('href')+ '&search=' +$('.search-val').val());
+		}
+
+ 
+ 
+	}
+
+</script>
+</html>

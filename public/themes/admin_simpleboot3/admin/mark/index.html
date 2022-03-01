@@ -1,0 +1,129 @@
+<include file="public@header" />
+<script type="text/javascript" src="__STATIC__/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js?v="></script>
+<link rel="stylesheet" href="__STATIC__/js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css?v=">
+</head>
+
+<body>
+
+
+
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+
+			<li class="active"><a href="#">列表</a></li>
+			<li><a href="{:url('mark/add')}">添加</a></li>
+
+		</ul>
+
+		<form class="well form-inline margin-top-20" method="get" action="{:url('Mark/index')}">
+			<input type="text" class="form-control" name="search" style="width: 120px;"
+			value="{:input('request.search/s','')}" placeholder="客户名称">
+			<input type="text" name="str_time" placeholder="开始时间" value="{:input('request.str_time/s','')}" class="js-bootstrap-date form-control statistics_start ">
+			至
+			<input type="text" name="end_time"  placeholder="结束时间" value="{:input('request.end_time/s','')}" class="js-bootstrap-date form-control statistics_end" >
+
+
+
+ 
+			<button type="submit" class="btn btn-primary"> 搜索</button>
+		</form>
+
+
+		<table class="table table-hover table-bordered table-striped ">
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th>客户名称</th>
+					<th>产品名称</th>
+					<th>材质</th>
+					<th>数量/交付数量</th>
+					<th>来料长/坑纸长</th>
+					<th>来料宽/坑纸宽</th>
+					<th>备注</th>
+					<th>创建日期/交付日期</th>
+
+					<th>{:lang('STATUS')}</th>
+
+					<th width="140">{:lang('ACTIONS')}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="order_list" item="vo">
+					<tr>
+						<td>{$vo.oid}</td>
+						<td>{$vo.user_name}</td>
+						<td>
+							{$vo.name}
+						</td>
+						<td>{$vo.material}</td>
+
+						<td>{$vo.number} / {$vo.com_number}</td>
+
+						<td>{$vo.length} / {$vo.length}</td>
+
+						<td>{$vo.width} / {$vo.inch_width}</td>
+						<td>{$vo.remark}</td>
+						<td>
+							{:date('Y-m-d H:i:s',$vo['add_time'])}
+							<p>{:date('Y-m-d H:i:s',$vo['com_time'])} </p>
+
+
+						</td>
+						<td>
+							<if condition="$vo['status'] eq 0">
+								<span class="label label-success">待确认 </span>
+								<elseif condition="$vo['status'] eq 1">
+									<span class="label label-success">待加工 </span>
+									<elseif condition="$vo['status'] eq 2">
+										<span class="label label-danger">加工中</span>
+										<else />
+										<span class="label label-danger">已完成</span>
+							</if>
+						</td>
+						<td align="center ">
+							<if condition="$vo['status'] eq 0">
+
+								<a class="btn btn-xs btn-primary js-ajax-dialog-btn"
+									href="{:url('mark/confirm',array('id'=>$vo['oid']))}">确认</a>
+							</if>
+
+							<a class="btn btn-xs btn-primary js-ajax-dialog-btn"
+								href="{:url('mark/topping',array('oid'=>$vo['oid']))}">置顶</a>
+							<a class="btn btn-xs btn-primary" href="{:url('mark/edit',array('id'=>$vo['oid']))}">编辑</a> 
+							<p>
+
+
+								<a class="btn btn-xs btn-primary"
+									href="{:url('mark/detail',array('id'=>$vo['oid']))}">详情</a>
+
+								<a class="btn btn-xs btn-danger js-ajax-delete" class=""
+									href="{:url('mark/delete',array('id'=>$vo['oid']))}">{:lang('DELETE')}</a>
+							</p>
+
+						</td>
+					</tr> 
+				</foreach>
+
+
+			</tbody>
+		</table>
+		<div class="pagination">{$page}</div>
+		<input type="hidden" value="{:input('request.search/s','')}" class="search-val" />
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+<script>
+
+	var pageList = $('.pagination li').length;
+	if($('.search-val').val() != ''){
+		for(var i=0;i<pageList;i++){
+			$('.pagination li').eq(i).find('a').attr('href',$('.pagination li').eq(i).find('a').attr('href')+ '&search=' +$('.search-val').val());
+		}
+
+
+ 
+	}
+
+</script>
+
+</html>

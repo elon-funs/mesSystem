@@ -1,0 +1,203 @@
+<include file="public@header" />
+<style>
+	.edui-editor-bottomContainer edui-default {
+		display: none !important;
+	}
+
+	#shop-img {
+		display: none;
+	}
+
+	.role {
+		padding-bottom: 5px;
+		padding-right: 5px;
+		display: inline-block;
+
+		font-weight: 500;
+		color: #666;
+		font-size: 14px;
+	}
+
+	.role-content {
+		display: none;
+	}
+</style>
+</head>
+
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs mb20">
+			<li><a href="{:url('/user/admin_index/index')}">{:lang('USER_INDEXADMIN_INDEX')}</a></li>
+			<li class="active"><a href="#">编辑用户</a></li>
+		</ul>
+
+  
+
+		<form method="post" id="form" class="form-horizontal js-ajax-form margin-top-20"
+			action="{:url('/admin/users/editPost')}" novalidate="novalidate">
+
+			<div class="form-group"> 
+				<label class="col-sm-2 control-label">头像</label>
+				<div class="col-md-6 col-sm-10">
+					<input type="hidden" name="avatar" id="thumb" value="{$user['avatar']}">
+					<a href="javascript:uploadOneImage('图片上传','#thumb');">
+						<if condition="empty($user['avatar'])">
+							<img src="__TMPL__/public/assets/images/default-thumbnail.png" id="thumb-preview"
+								width="135" style="cursor: hand" />
+							<else />
+							<img src="{$user['avatar']}" id="thumb-preview" width="135" style="cursor: hand" />
+						</if>
+
+					</a>
+				</div>
+
+			</div>
+
+
+			<input type='hidden' value="{$user.role_no}" class="role_no" name="role_no">   
+			<div class="form-group">
+				<label class="col-sm-2 control-label">(登录账号)电话</label>
+				<div class="col-md-6 col-sm-10">
+					<input class="form-control" type="number" name="mobile" value="{$user['mobile']}"></input>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">密码</label>
+				<div class="col-md-6 col-sm-10">
+					<input class="form-control" type="password" name="user_pass"> </input>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label">用户</label>
+				<div class="col-md-6 col-sm-10">
+					<input class="form-control" name="user_login" value="{$user['user_login']}"></input>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">邮箱</label>
+				<div class="col-md-6 col-sm-10">
+					<input class="form-control" name="user_email" value="{$user['user_email']}"></input>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label">昵称</label>
+				<div class="col-md-6 col-sm-10">
+					<input class="form-control" name="user_nickname" value="{$user['user_nickname']}"></input>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">所属部门</label>
+				<div class="col-md-6 col-sm-10">
+					<select class="form-control" name="dept_info">
+		                <option value="{$user['dept_id']}_{$user['dept_name']}">{$user['dept_name']}</option>
+		                <foreach name="dept_list" item="vo">
+ 							<if condition="$user.dept_id != $vo.id">
+		                    <option value="{$vo['id']}_{$vo['name']}">{$vo['name']}</option>
+		                    </if>
+		                </foreach>
+                    </select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">公司名称</label>
+				<div class="col-md-6 col-sm-10">
+					<input class="form-control" name="signature" value="{$user['signature']}"></input>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label">权限</label>
+				<div class="col-md-6 col-sm-10">
+					<label style="padding-right: 10px;" class="control-label "> <input class="role" type="radio"
+							name="role" <if
+							condition="$user.role == 1">checked</if> value="1"></input>总账户</label>
+
+					<label class="control-label"> <input type="radio" class="role" name="role" <if
+						condition="$user.role == 2">checked</if> value="2"></input>员工账户</label>
+						<label class="control-label"> <input type="radio"  <if 
+							condition="$user.role == 0">checked</if> class="role" name="role"
+							value="0"></input>普通客户</label>
+				</div>
+			</div> 
+
+			<input type="hidden" name="user_id" value="{$user['id']}">
+ 
+
+			<div class="form-group role-content" <if condition='$user.role == 2'> style="display:block;" </if>>
+				<label class="col-sm-2 control-label"></label>
+				<label class=" col-sm-10" > 
+  
+					<foreach name="roles_arr" item="item"> 
+						   
+						<label > <input name="crole" type="checkbox" <if   
+							condition="in_array($item.pid,$role_no)">checked</if> 
+								value="{$item.pid}" />{$item.pname}</label>
+					</foreach>
+				</label>
+
+
+			</div>
+
+
+
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-success js-ajax-submit">修改</button>
+					<a class="btn btn-default" href="javascript:history.back(-1);">返回</a>
+				</div>
+			</div>
+		</form>
+
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+	<script>
+
+		$('.select_role_no').change(function () {
+
+			$('.user_login').val($(".select_role_no").find("option:selected").attr('data-user_login'));
+			$('.role_no').val($(".select_role_no").find("option:selected").attr('data-role_no'));
+			$('.signature').val($(".select_role_no").find("option:selected").attr('data-signature'));
+			$("input[name='crole']").each(function (i) {
+				if($(this).attr('disabled')){
+					$(this).attr('disabled',false);
+					$(this).prop('checked', false);
+				}
+				if($(this).val() == $(".select_role_no").find("option:selected").attr('data-role_no')){
+					$(this).prop('checked', true);
+					$(this).attr('disabled', true);
+				}
+				selectCheck();
+		
+			})
+		});
+		$('.role').change(function () {
+
+			if ($(this).val() == 2) {
+				$('.role-content').show();
+	
+			} else {
+		
+				$('.role-content').hide();
+			}
+		});
+		$('input[name="crole"]').change(function () {
+			selectCheck();
+		});
+		function selectCheck() {
+			var arr = [];
+			$("input[name='crole']:checked").each(function (i) {
+				arr.push($(this).val())
+
+			})
+			$('.role_no').val(arr.join(','));
+		}
+		// if($(".select_role_no").find("option:selected").attr('data-user_login') == '请账号归属人'){
+		// 	alert('请选择ERP用户')	
+		// }
+	</script>
+</body>
+
+</html>

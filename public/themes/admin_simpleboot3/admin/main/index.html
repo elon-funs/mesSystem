@@ -1,0 +1,469 @@
+<php>
+    if (!function_exists('_get_system_widget')) {
+    function _get_system_widget($name){
+</php>
+<switch name="name">
+    <case value="CmfHub">
+
+    </case>
+    <case value="CmfDocuments">
+
+    </case>
+    <case value="MainContributors">
+
+    </case>
+    <case value="Contributors">
+
+    </case>
+</switch>
+<php>
+    }
+    }
+</php>
+<script src="/static/js/echarts/echarts.min.js"></script>
+<link rel="stylesheet" href="/static/css/styles.css">
+<include file="public@header" />
+<style>
+    th,
+    td {
+
+        text-align: center;
+        border: 1px solid #ccc;
+        line-height: 35px;
+        font-size: 12px;
+    }
+
+    th {
+        background: #f4f4f4;
+    }
+
+    .t-title {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-top: 3px solid #18bc9c;
+        margin-bottom: 0;
+        border-bottom: 0;
+        font-size: 500;
+        font-size: 16px;
+    }
+
+    .flex-fs {
+        display: flex;
+        align-items: center;
+
+    }
+
+    .list {
+        margin-top: 70px;
+        margin-bottom: 80px;
+    }
+
+    .list .icon {
+        width: 60px;
+        height: 60px;
+        margin-right: 10px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #18bc9c;
+    }
+
+    .list .value {
+        font-weight: bold;
+        font-size: 18px;
+
+    }
+
+    .list .text {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .list .icon i {
+        color: #fff;
+        font-size: 24px;
+
+    }
+    a{
+        text-decoration:none;
+    }
+</style>
+<hook name="admin_before_head_end" />
+</head>
+
+<body>
+
+
+
+
+    <div class="wrap container ">
+        <div class="row list">
+            <div class="col-sm-2 flex-fs">
+                <div class="icon" style="background:#27C24C;"><i class="fa fa-file-text" aria-hidden="true"></i></div>
+                <div>
+                    <div class="value">{$data['tatol_product']}</div>
+                    <div class="text">总产品数</div>
+                </div>
+            </div>
+            <div class="col-sm-2 flex-fs">
+                <div class="icon" style="background: #23b7e5;"><i class="fa fa-file-text" aria-hidden="true"></i></div>
+                <div>
+                    <div class="value">{$data['tatol_com_product']}</div>
+                    <div class="text">完成产品数</div>
+                </div>
+            </div>
+            <div class="col-sm-2 flex-fs">
+                <div class="icon" style="background: #fa8564;"><i class="fa fa-file-text" aria-hidden="true"></i></div>
+                <div>
+                    <div class="value">{$data['tatol_no_product']}</div>
+                    <div class="text">未完成产品数</div>
+                </div>
+            </div>
+            <div class="col-sm-2 flex-fs">
+                <div class="icon" style="background: #F05050;"><i class="fa fa-file-text" aria-hidden="true"></i></div>
+                <div>
+                    <div class="value">{$data['tatol_sh_product']}</div>
+                    <div class="text">损耗</div>
+                </div>
+            </div>
+            <a class="col-sm-2 flex-fs" href="#1">
+                <div class="icon" style="background: #bbe20c;"><i class="fa fa-file-text" aria-hidden="true"></i></div>
+                <div>
+                    <div class="value"><?php echo count($nocom_list) ;?></div>
+                    <div class="text">待确认订单</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="row" style="display: none;">
+            <div class="col-sm-3 ui-sortable">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label  pull-right">总</span>
+                        <h5>总产品数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{$data['tatol_product']}</h1>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 ui-sortable">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-info pull-right">完</span>
+                        <h5>完成产品数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{$data['tatol_com_product']}</h1>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 ui-sortable">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right">未</span>
+                        <h5>未完成产品数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{$data['tatol_no_product']}</h1>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 ui-sortable">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right">损</span>
+                        <h5>损耗</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{$data['tatol_sh_product']}</h1>
+
+
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-sm-6 ui-sortable">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right">逾</span>
+                        <h5>逾期</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{$data['tatol_sh_product']}</h1>
+     
+
+                    </div>
+                </div>
+            </div> -->
+
+        </div>
+
+      <div style="display: none;">
+    
+        <?php var_dump($nocom_list) ;?>
+        
+    </div>
+
+
+        <div class="row" style="margin-top: 50px;">
+
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="main" style="height:400px;"></div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h5 class="t-title">七天内需交货订单</h5>
+                            <if condition="count($order_list) gt 0">
+                                <table class="table-striped" style="width: 100%;">
+                                    <tr>
+                                        <th>订单号</th>
+                                        <th>客户</th>
+                                        <th>完成与否</th>
+                                        <th>交货时间</th>
+                                        <th>距交货</th>
+                                    </tr>
+
+                                    <foreach name="order_list" item="vo">
+
+                                        <tr>
+                                            <td>{$vo['order_no']}</td>
+                                            <td>{$vo['user_name']}</td>
+                                            <td>
+                                                <if condition="$vo['status'] eq 0">
+                                                    <span class="label label-success">待确认 </span>
+                                                    <elseif condition="$vo['status'] eq 1">
+                                                        <span class="label label-success">待加工 </span>
+                                                        <elseif condition="$vo['status'] eq 2">
+                                                            <span class="label label-danger">加工中</span>
+                                                            <else />
+                                                            <span class="label label-danger">已完成</span>
+                                                </if>
+                                            </td>
+                                            <td>{:date('Y-m-d H:i:s',$vo['com_time'])}</td>
+
+                                            <if condition="($vo['com_time'] -time()) < 0">
+
+                                                <if condition="-round((($vo['com_time'] - time())/3600))  < 24">
+
+                                                    <td style="background:#f08f8c;color:#fff;">
+                                                        逾期 <?php echo -(round(( $vo['com_time'] -time())/3600)) ;?> 小时
+                                                    </td>
+
+
+                                                    <else />
+
+                                                    <td style="background:#d9534f;color:#fff;">
+                                                        逾期 <?php echo -(round(( $vo['com_time'] -time())/3600/24)) ;?> 天
+                                                    </td>
+
+                                                </if>
+
+
+                                                <else />
+
+
+
+
+
+                                                <if condition="round((($vo['com_time'] -time())/3600 ))  < 24 ">
+
+
+                                                    <td style="background:#7fbbf7;color:#fff;">
+                                                        <?php echo round(( $vo['com_time'] -time())/3600) ;?> 小时
+                                                    </td>
+
+
+
+
+
+
+
+                                                    <else />
+
+                                                    <td style="background:#4af079;color:#fff;">
+
+                                                        <?php echo round(( $vo['com_time'] -time())/3600/24)   ;?>天后
+                                                    </td>
+                                                </if>
+
+                                            </if>
+
+                                            <!-- 
+                                            <td  <if condition="( $vo['com_time'] -time())/3600/24 < 0"> style="background:#d9534f;color:#fff;" </if>>
+                                                <if condition="round(( $vo['com_time'] -time())/3600/24) == 0">
+
+                                                    <if condition="( $vo['com_time'] -time())/3600/24 < 0">
+                                                        逾期 <?php echo -(round(( $vo['com_time'] -time())/3600)) ;?> 小时
+                                                        <else/>
+                                                        <?php echo round(( $vo['com_time'] -time())/3600) ;?> 小时
+                                                    </if>
+
+                                                
+                                                  <elseif condition="round(( $vo['com_time'] -time())/3600/24) < 0">
+                                                    已逾期<?php echo -(round(( $vo['com_time'] -time())/3600/24))   ;?>天
+
+                                                    <else/>
+                                                    <?php echo round(( $vo['com_time'] -time())/3600/24)   ;?>天后 
+                                                    
+                                                </if>
+                                               
+                                            </td>  -->
+                                        </tr>
+
+                                    </foreach>
+
+
+                                </table>
+                                <else />
+                                暂无
+                            </if>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row" style="margin-top: 50px;" id="1">
+                        <div class="col-lg-12">
+                            <h5 class="t-title">待确认订单</h5>
+                            <if condition="count($nocom_list) gt 0">
+                                <table class="table-striped" style="width: 100%;">
+                                    <tr>
+                                        <th>订单号</th>
+                                        <th>客户</th>
+                                        <th>材料</th>
+                                        <th>是否回厂</th>
+                                        <th>交货时间</th>
+                                        <th>操作</th>
+
+                                    </tr>
+
+                                    <foreach name="nocom_list" item="vo">
+
+                                        <tr>
+                                            <td>{$vo['order_no']}</td>
+                                            <td>{$vo['user_name']}</td>
+                                            <td>{$vo['material']}</td>
+                                            <td>
+                                                <if condition="$vo['is_return'] eq 0">
+                                                    不回厂
+                                                    <else/>
+                                                    回厂
+
+                                                </if>
+                                            </td>
+                                            <td>{:date('Y-m-d H:i:s',$vo['com_time'])}</td>
+                                            <td>
+                                                <a class="btn btn-xs btn-primary"
+                                                href="{:url('mark/detail',array('id'=>$vo['oid']))}">查看</a>
+
+                                                <a class="btn btn-xs btn-primary js-ajax-dialog-btn"
+                                                    href="{:url('mark/confirm',array('id'=>$vo['oid']))}">确认</a>
+                                            </td>
+
+
+
+
+                                        </tr>
+
+                                    </foreach>
+
+
+                                </table>
+                                <else />
+                                暂无
+                            </if>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+    <script src="__STATIC__/js/admin.js"></script>
+    <php>
+        $lang_set=defined('LANG_SET')?LANG_SET:'';
+        $thinkcmf_version=cmf_version();
+    </php>
+    <script type="text/javascript">
+        var list = '<?php echo json_encode($list) ;?>';
+        list = JSON.parse(list);
+
+        var chartData = [];
+        var chartData1 = [];
+        var chartData2 = [];
+        list.forEach((item) => {
+            chartData.unshift(item.date);
+            chartData1.unshift(item.total_number);
+            chartData2.unshift(item.total_comnumber);
+        });
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+
+            title: {
+                text: '每月接单量(产品数)'
+            },
+            tooltip: {},
+            legend: {
+                data: ['总数', '完成数']
+            },
+            xAxis: {
+                data: chartData
+            },
+            yAxis: {},
+            series: [{
+                name: '总数',
+                type: 'bar',
+                data: chartData1,
+                itemStyle: {
+                    normal: {
+                        //好，这里就是重头戏了，定义一个list，然后根据所以取得不同的值，这样就实现了，
+                        color: '#5bc0de',
+                        //以下为是否显示，显示位置和显示格式的设置了
+
+                    }
+                },
+
+            }, {
+                name: '完成数',
+                type: 'bar',
+                data: chartData2,
+                itemStyle: {
+                    normal: {
+                        //好，这里就是重头戏了，定义一个list，然后根据所以取得不同的值，这样就实现了，
+                        color: '#5dc97d',
+                        //以下为是否显示，显示位置和显示格式的设置了
+
+                    }
+                },
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+
+    <hook name="admin_before_body_end" />
+</body>
+
+</html>

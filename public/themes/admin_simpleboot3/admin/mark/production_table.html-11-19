@@ -1,0 +1,210 @@
+<include file="public@header" />
+<style>
+	th {
+		padding: 5px;
+		text-align: center;
+	}
+
+	td {
+		text-align: center;
+	}
+
+	.table th,
+	.table td {
+		border: 1px solid #ccc;
+	}
+</style>
+</head>
+
+<body>
+
+
+
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+
+			<li class="active"><a href="#">列表</a></li>
+
+
+		</ul>
+		<form class="well form-inline margin-top-20" method="get" action="{:url('mark/production_table')}">
+
+			<input type="text" class="form-control" name="search" placeholder="关键字" style="width: 120px;"
+				value="{:input('request.search/s','')}" placeholder="">
+
+				<button class="btn btn-default" type="submit">搜索</button>
+		</form>
+
+
+		<div style="display:none;">
+
+
+			<?php var_dump($porder_list) ;?>
+
+		</div>
+
+
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th>订单</th>
+					<th>生产工艺</th>
+
+
+
+
+
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="porder_list" item="vo">
+					<tr>
+						<td>
+							{$vo['oid']}</td>
+						<td>
+
+							<table class="table" align="center" style="width:100%;margin:0; ">
+								<tr>
+									<th>单号</th>
+									<th>状态</th>
+
+									<th>进度</th>
+
+								</tr>
+								<tr>
+									<td>{$vo['order_no']}</td>
+									<td>
+										<if condition=" $vo['status'] eq 0">
+											待加工
+										<elseif condition=" $vo['status'] eq 1">
+											 已完成
+										<else/>
+										加工中
+										</if>
+									</td>
+									<td>
+										{$vo['com_pocart']}%
+									</td>
+								</tr>
+								<tr>
+									<th>客户名称</th>
+									<th>产品名称</th>
+
+									<th>来料材质</th>
+
+								</tr>
+								<tr>
+									<td>{$vo['user_name']}</td>
+									<td>{$vo['name']}</td>
+									<td>{$vo['material']} </td>
+
+								</tr>
+								<tr>
+									<th>来料数量</th>
+									<th>来料长</th>
+									<th>来料宽</th>
+
+								</tr>
+								<tr>
+									<td>{$vo['number']}</td>
+
+									<td>{$vo['length']} </td>
+									<td>{$vo['width']}</td>
+								</tr>
+								<tr>
+									<th>交付数量</th>
+									<th>创建日期</th>
+									<th>交付日期</th>
+								</tr>
+								<tr>
+									<td> {$vo['com_number']}</td>
+									<td>{:date('Y-m-d H:i:s',$vo['add_time'])} </td>
+									<td>{:date('Y-m-d H:i:s',$vo['com_time'])}</td>
+								</tr>
+							</table>
+						</td>
+
+
+
+
+						<td>
+
+							<table class="table" align="center" style="width:100%;margin:0; ">
+
+								<tr>
+									<foreach name="vo.Production" item="vt">
+										<foreach name="pro_data" item="vos"> 
+											<if condition=" $vt['proid'] eq $vos['pid']">
+												<th>{$vos['pname']}</th>
+												<else />
+
+
+												<foreach name="vos.next_level" item="voss">
+
+													<if condition=" $vt['proid'] eq $voss['pid']">
+														<th>{$voss['pname']}</th>
+													</if>
+												</foreach>
+
+
+
+											</if>
+
+
+
+										</foreach>
+									</foreach>
+
+								</tr>
+								<tr>
+
+									<foreach name="vo.Production" item="vt">
+										<foreach name="pro_data" item="vos"> 
+											<if condition=" $vt['proid'] eq $vos['pid']">
+												<td>
+												{$vt['sum_num']}	| {$vt['com_num']}
+												</td>
+												<else />
+
+
+												<foreach name="vos.next_level" item="voss">
+
+													<if condition=" $vt['proid'] eq $voss['pid']">
+														<td>{$vt['sum_num']}	| {$vt['com_num']}</td>
+													</if>
+												</foreach>
+
+
+
+											</if>
+
+
+
+										</foreach>
+									</foreach>
+
+								</tr>
+
+							</table>
+
+
+
+						</td>
+
+
+
+
+
+					</tr>
+				</foreach>
+
+
+			</tbody>
+		</table>
+		<div class="pagination">{$page}</div>
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+
+</html>
